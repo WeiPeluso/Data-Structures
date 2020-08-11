@@ -107,7 +107,8 @@ class DoublyLinkedList:
     """
 
     def move_to_front(self, node):
-        pass
+        self.delete(node)
+        self.add_to_head(node.value)
 
     """
     Removes the input node from its current spot in the 
@@ -115,7 +116,8 @@ class DoublyLinkedList:
     """
 
     def move_to_end(self, node):
-        pass
+        self.delete(node)
+        self.add_to_tail(node.value)
 
     """
     Deletes the input node from the List, preserving the 
@@ -123,7 +125,31 @@ class DoublyLinkedList:
     """
 
     def delete(self, node):
-        pass
+        if self.head is None and self.tail is None:
+            return
+        elif self.head is self.tail and self.head == node:
+            self.head = None
+            self.tail = None
+            self.length -= 1
+
+        elif self.head == node:
+            self.remove_from_head()
+        elif self.tail == node:
+            self.remove_from_tail()
+        else:
+            curr_node = self.head
+            prev_node = None
+            next_node = self.head.next
+
+            while (curr_node.next):
+                if (curr_node == node):
+                    prev_node.next = next_node
+                    next_node.prev = prev_node
+                    curr_node = None
+                    self.length -= 1
+                prev_node = curr_node
+                curr_node = next_node
+                next_node = curr_node.next
 
     """
     Finds and returns the maximum value of all the nodes 
