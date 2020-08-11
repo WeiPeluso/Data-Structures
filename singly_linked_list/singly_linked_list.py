@@ -1,21 +1,18 @@
 class Node:
-    def __init__(self, value, next_node=None):
-        # the value that the node is holding
+    def __init__(self, value=None, next_node=None):
+        # the value at this linked list node
         self.value = value
-        # reference to the next node in the linked list
+        # reference to the next node in the list
         self.next_node = next_node
-
-   # method to get the value of the node
 
     def get_value(self):
         return self.value
 
-   # method to get the node's `next_node`
     def get_next(self):
         return self.next_node
-   # method to update the node's `next_node` to the input node
 
     def set_next(self, new_next):
+        # set this node's next_node reference to the passed in node
         self.next_node = new_next
 
 
@@ -23,76 +20,88 @@ class LinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
-        self.length = 1 if node is not None else 0
+        self.length = 0
 
-    def __len__(self):
-        return self.length
+    def add_to_head(self, value):
+        new_node = Node(value, self.head)
+        self.head = new_node
+
+        if self.length == 0:
+            self.tail = new_node
+        self.length += 1
 
     def add_to_tail(self, value):
-        # wrap the value in a Node
         new_node = Node(value)
-        # check if the Linked List is empty
-    if self.head is None and self.tail is None:
-        # set head and tail to the new node
-        self.head = new_node
-        self.tail = new_node
-        # otherwise, the list has at least one node
-    else:
-        # update the last node's `next_node` to the new node
-        self.tail.set_next(new_node)
-        # update `self.tail` to point the new node we just added
-        self.tail = new_node
-
-    def remove_tail(self):
-        # check if the linked list is empty
         if self.head is None and self.tail is None:
-            return None
-
-        # check if the linked list has only one node
-        if self.head == self.tail:
-            # store the node we're going to remove's value
-            val = self.head.get_value()
-            self.head = None
-            self.tail = None
-            return val
-
-        # otherwise, the linked list has more than one Node
+            self.head = new_node
         else:
-           # store the last Node's value in a nother variable so we can return it
-            val = self.tail.get_value()
-        # we need to set `self.tail` to the second-to-last Node
-        # the only way we can do this, is by traversing the whole linked list
-        # from the beginning
+            self.tail.set_next(new_node)
 
-        # starting from the head, we'll traverse down to the second-to-last Node
-        # init another reference to keep track of where we are in the linked
-        # list as we're iterating
-            current = self.head
-
-        # keep iterating until the node after `current` is the tail
-        while current.get_next() != self.tail:
-            # keep iterating
-            current = current.get_next()
-   # set `self.tail` to `current`
-        self.tail = current
-   # set the new tail's `next_node` to None
-        self.tail.set_next(None)
-        return val
+        self.tail = new_node
+        self.length += 1
 
     def remove_head(self):
-        # check if the linked list empty
-        if self.head is None and self.tail is None:
+        if self.tail is None and self.head is None:
             return None
-        # check if there is only one linked list node
-        if self.head == self.tail:
-            val = self.head.get_value()
+
+        curr_value = self.head.get_value()
+        if self.head is self.tail:
             self.head = None
             self.tail = None
-            return val
+
         else:
-            # store the old head's value that we need to return
-            val = self.head.get_value()
-            # set `self.head` to the old head's `next_node`
             self.head = self.head.get_next()
-            # return the old_head's value
-            return val
+
+        self.length -= 1
+        return curr_value
+
+    def remove_tail(self):
+        if self.tail is None and self.head is None:
+            return None
+
+        elif self.tail is self.head:
+            curr_value = self.tail.get_value()
+            self.head = None
+            self.tail = None
+            self.length -= 1
+            return curr_value
+
+        else:
+            curr_node = self.head
+            old_tail = self.tail.get_value()
+
+            while curr_node.get_next() is not self.tail:
+                curr_node = curr_node.get_next()
+
+            self.tail = curr_node
+            self.tail.set_next(new_next=None)
+            self.length -= 1
+            return old_tail
+
+    def contains(self, value):
+        if self.tail is None and self.head is None:
+            return False
+
+        curr_node = self.head
+
+        while curr_node.get_value() is not value:
+            curr_node = curr_node.get_next()
+            if curr_node is None:
+                return False
+
+        return curr_node
+
+    def get_max(self):
+        if self.head is None and self.tail is None:
+            return None
+
+        curr_node = self.head
+        curr_max = self.head.get_value()
+
+        while curr_node is not None:
+
+            if curr_max <= curr_node.get_value():
+                curr_max = curr_node.get_value()
+            curr_node = curr_node.get_next()
+
+        return curr_max

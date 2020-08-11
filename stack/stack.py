@@ -35,7 +35,8 @@ return elements in Last In First Out order.
 
 # Implement the stack using linked list
 
-from singly_linked_list import Node, LinkedList
+import sys
+sys.path.append("../single_linked_list")
 
 
 class Stack:
